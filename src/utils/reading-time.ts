@@ -1,4 +1,5 @@
 import type { PortableTextBlock } from "emdash";
+import { toPortableBlocks } from "./portable-content";
 
 const WORDS_PER_MINUTE = 200;
 const CJK_CHARACTERS_PER_MINUTE = 500;
@@ -47,9 +48,11 @@ export function extractText(blocks: PortableTextBlock[] | undefined): string {
 
 /**
  * Calculate reading time in minutes from Portable Text content
+ * （文字列の Markdown も {@link toPortableBlocks} で扱う）
  */
-export function getReadingTime(content: PortableTextBlock[] | undefined): number {
-	const text = extractText(content);
+export function getReadingTime(content: unknown): number {
+	const blocks = toPortableBlocks(content);
+	const text = extractText(blocks);
 	const cjkCharacterCount = countCjkCharacters(text);
 	const wordCount = countWords(text.replace(CJK_CHARACTER_REGEX, " "));
 	const minutes = Math.ceil(

@@ -18,6 +18,7 @@ import {
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
 import { getReadingTime } from "../../utils/reading-time";
+import { toPortableBlocks } from "../../utils/portable-content";
 import { resolveBlogSiteIdentity } from "../../utils/site-identity";
 
 const slug = decodeSlug(Astro.params.slug);
@@ -68,6 +69,8 @@ const seo = getSeoMeta(post, {
 
 // Bylines are already hydrated by getEmDashEntry
 const bylines = post.data.bylines ?? [];
+
+const postContent = toPortableBlocks(post.data.content) ?? [];
 
 // Get reading time
 const readingTime = getReadingTime(post.data.content);
@@ -231,7 +234,7 @@ const publishDate =
 				</header>
 
 				<div class="article-content">
-					<PortableText value={post.data.content} />
+					<PortableText value={postContent} />
 				</div>
 
 				<div class="article-comments">
