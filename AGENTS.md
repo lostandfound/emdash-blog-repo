@@ -10,6 +10,41 @@ npx emdash seed seed/seed.json --validate  # Validate seed file
 
 The admin UI is at `http://localhost:4321/_emdash/admin`.
 
+## Remote CLI (production Workers)
+
+Default site URL: `https://emdash-blog-repo.denshoch.workers.dev`  
+Admin: `https://emdash-blog-repo.denshoch.workers.dev/_emdash/admin`
+
+### Auth for agents (Cursor)
+
+- API token lives in repo-root `.env` as `EMDASH_TOKEN` (gitignored). Do **not** read `.env` into chat or paste the token into replies.
+- When running CLI commands from the project, load env then call `emdash` with `--url` (or use the wrapper below).
+
+### One-shot shell (copy-paste)
+
+From the repo root:
+
+```bash
+cd /path/to/emdash-blog
+set -a && source .env && set +a
+npx emdash whoami --url https://emdash-blog-repo.denshoch.workers.dev
+npx emdash content list posts --url https://emdash-blog-repo.denshoch.workers.dev
+npx emdash types --url https://emdash-blog-repo.denshoch.workers.dev
+```
+
+`--token` overrides `EMDASH_TOKEN` if both are set. Resolution order is documented in the CLI (`--token`, then `EMDASH_TOKEN`, then stored `emdash login` credentials).
+
+### Wrapper script (preferred)
+
+```bash
+./scripts/emdash-remote.sh whoami
+./scripts/emdash-remote.sh content list posts
+./scripts/emdash-remote.sh content get posts <ULID_OR_SLUG>
+./scripts/emdash-remote.sh types --output .emdash/types-remote.ts
+```
+
+Optional `.env` entry `EMDASH_REMOTE_ORIGIN` changes the `--url` target (defaults to the Workers dev hostname above).
+
 ## Key Files
 
 | File                     | Purpose                                                                            |
@@ -20,6 +55,7 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 | `emdash-env.d.ts`        | Generated types for collections (auto-regenerated on dev server start)             |
 | `src/layouts/Base.astro` | Base layout with EmDash wiring (menus, search, page contributions)                 |
 | `src/pages/`             | Astro pages -- all server-rendered                                                 |
+| `scripts/emdash-remote.sh` | Loads `.env` and runs `npx emdash …` against production `--url`                  |
 
 ## Skills
 
