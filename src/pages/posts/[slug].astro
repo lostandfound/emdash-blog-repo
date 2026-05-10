@@ -17,8 +17,9 @@ import {
 } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import PostCard from "../../components/PostCard.astro";
-import { getReadingTime } from "../../utils/reading-time";
+import { applyEmDashCacheHint } from "../../utils/emdash-cache-hint";
 import { toPortableBlocks } from "../../utils/portable-content";
+import { getReadingTime } from "../../utils/reading-time";
 import { resolveBlogSiteIdentity } from "../../utils/site-identity";
 
 const slug = decodeSlug(Astro.params.slug);
@@ -33,7 +34,7 @@ if (!post) {
 	return Astro.redirect("/404");
 }
 
-Astro.cache.set(cacheHint);
+applyEmDashCacheHint(Astro, cacheHint);
 
 // Get featured image URL for OG fallback
 // The image may have src (external) or meta.storageKey (local)

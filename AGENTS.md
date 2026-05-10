@@ -70,5 +70,5 @@ Agent skills are in `.agents/skills/`. Load them when working on specific tasks:
 - All content pages must be server-rendered (`output: "server"`). No `getStaticPaths()` for CMS content.
 - Image fields are objects (`{ src, alt }`), not strings. Use `<Image image={...} />` from `"emdash/ui"`.
 - `entry.id` is the slug (for URLs). `entry.data.id` is the database ULID (for API calls like `getEntryTerms`).
-- Always call `Astro.cache.set(cacheHint)` on pages that query content.
+- Call `applyEmDashCacheHint(Astro, cacheHint)` from `src/utils/emdash-cache-hint.ts` on pages that query content (wraps `Astro.cache.set`; on Cloudflare Workers `Astro.cache` may be undefined).
 - Taxonomy names in queries must match the seed's `"name"` field exactly (e.g., `"category"` not `"categories"`).
