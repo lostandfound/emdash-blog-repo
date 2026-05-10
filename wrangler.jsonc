@@ -18,6 +18,14 @@
 			"bucket_name": "emdash-blog-media","preview_bucket_name": "emdash-blog-media",
 		},
 	],
+	// Astro sessions (@astrojs/cloudflare). Use an existing namespace ID so deploy does not
+	// call "create" again (title already exists → API 10014).
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "1b4d9e6c9e97475f82f19de89ebf18db",
+		},
+	],
 	// Dynamic Workers (worker_loaders) require a paid Workers plan. Omit on free tier;
 	// use in-process plugins only (see astro.config.mjs).
 	// "worker_loaders": [{ "binding": "LOADER" }],
