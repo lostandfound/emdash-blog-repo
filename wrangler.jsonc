@@ -18,10 +18,7 @@
 			"bucket_name": "emdash-blog-media","preview_bucket_name": "emdash-blog-media",
 		},
 	],
-	// Worker Loader for plugin sandboxing
-	"worker_loaders": [
-		{
-			"binding": "LOADER",
-		},
-	],
+	// Dynamic Workers (worker_loaders) require a paid Workers plan. Omit on free tier;
+	// use in-process plugins only (see astro.config.mjs).
+	// "worker_loaders": [{ "binding": "LOADER" }],
 }
