@@ -45,6 +45,15 @@ npx emdash types --url https://emdash-blog-repo.denshoch.workers.dev
 
 Optional `.env` entry `EMDASH_REMOTE_ORIGIN` changes the `--url` target (defaults to the Workers dev hostname above).
 
+## Production debugging (agents)
+
+When the deployed site returns 5xx, **confirm runtime evidence before changing theme code or content**.
+
+1. **Scope:** `curl -o /dev/null -w '%{http_code}\n'` on `/`, `/posts`, `/404`, `/rss.xml` — separates “all routes broken” vs “one route”.
+2. **Logs:** `npx wrangler tail emdash-blog-repo --format pretty` (or Cloudflare dashboard → Workers → Logs), reproduce with `curl`, read the stack trace and message.
+3. **Known issues:** Search GitHub for `withastro/astro` + Cloudflare adapter / `Astro.cache`, and `emdash-cms/emdash` for CMS-specific errors — only then form a fix hypothesis.
+4. **Local parity:** `npx wrangler dev --remote` can reproduce some production binding behaviour; still verify with tail on the real worker when unsure.
+
 ## Key Files
 
 | File                     | Purpose                                                                            |
