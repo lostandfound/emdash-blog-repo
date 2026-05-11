@@ -2,8 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "emdash-blog-repo",
 	"main": "./src/worker.ts",
-	// Custom hostname for this Worker (DNS + TLS managed by Cloudflare on deploy).
-	// Requires zone `denshochan.com` on the same account; change zone_name if different.
+	// Custom hostname (DNS + TLS on deploy). Requires zone `denshochan.com` on this account.
 	"routes": [
 		{
 			"pattern": "emdash.denshochan.com",
