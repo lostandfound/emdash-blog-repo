@@ -2,6 +2,15 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "emdash-blog-repo",
 	"main": "./src/worker.ts",
+	// Custom hostname for this Worker (DNS + TLS managed by Cloudflare on deploy).
+	// Requires zone `denshochan.com` on the same account; change zone_name if different.
+	"routes": [
+		{
+			"pattern": "emdash.denshochan.com",
+			"zone_name": "denshochan.com",
+			"custom_domain": true,
+		},
+	],
 	"compatibility_date": "2026-02-24",
 	"compatibility_flags": ["nodejs_compat"],
 	"d1_databases": [

@@ -13,7 +13,8 @@ The admin UI is at `http://localhost:4321/_emdash/admin`.
 ## Remote CLI (production Workers)
 
 Default site URL: `https://emdash-blog-repo.denshoch.workers.dev`  
-Admin: `https://emdash-blog-repo.denshoch.workers.dev/_emdash/admin`
+Custom domain (when DNS is live): `https://emdash.denshochan.com` — set `EMDASH_REMOTE_ORIGIN` in `.env` for CLI against that host.  
+Admin: `https://<host>/_emdash/admin`
 
 ### Auth for agents (Cursor)
 
