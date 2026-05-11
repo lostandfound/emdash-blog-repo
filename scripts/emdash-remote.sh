@@ -26,11 +26,12 @@ source .env
 set +a
 ORIGIN="${EMDASH_REMOTE_ORIGIN:-https://emdash-blog-repo.denshoch.workers.dev}"
 
+# Subcommand must come immediately after `emdash` (citty); --header before whoami is parsed as the command name.
 cmd=(npx emdash)
+cmd+=("$@")
 if [[ -n "${CF_ACCESS_CLIENT_ID:-}" && -n "${CF_ACCESS_CLIENT_SECRET:-}" ]]; then
 	cmd+=(--header "CF-Access-Client-Id: ${CF_ACCESS_CLIENT_ID}")
 	cmd+=(--header "CF-Access-Client-Secret: ${CF_ACCESS_CLIENT_SECRET}")
 fi
-cmd+=("$@")
 cmd+=(--url "$ORIGIN")
 exec "${cmd[@]}"
