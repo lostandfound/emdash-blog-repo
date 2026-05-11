@@ -46,6 +46,8 @@ npx emdash types --url https://emdash-blog-repo.denshoch.workers.dev
 
 Optional `.env` entry `EMDASH_REMOTE_ORIGIN` changes the `--url` target (defaults to the Workers dev hostname above).
 
+When the site is behind **Cloudflare Access**, the CLI may get HTML instead of JSON (`Unexpected token '<'`). Set **`CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET`** in `.env` (service token); `./scripts/emdash-remote.sh` passes them as `--header`. Do not use a single-line `EMDASH_HEADERS` with `\n` — bash will not turn that into a real newline.
+
 ## Production debugging (agents)
 
 When the deployed site returns 5xx, **confirm runtime evidence before changing theme code or content**.

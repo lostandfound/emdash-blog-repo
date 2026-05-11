@@ -3,6 +3,11 @@
 # Run EmDash CLI against the deployed Workers instance.
 # Loads .env from the repo root (EMDASH_TOKEN, optional EMDASH_REMOTE_ORIGIN).
 #
+# Cloudflare Access (Zero Trust): if the site returns HTML login pages to the
+# API, set CF_ACCESS_CLIENT_ID and CF_ACCESS_CLIENT_SECRET in .env (service token).
+# Alternatively use EMDASH_HEADERS with real newlines between "Name: Value" lines
+# (a single line with \n will not work — bash does not expand \n in .env).
+#
 # Usage (from anywhere):
 #   ./scripts/emdash-remote.sh content list posts
 #   ./scripts/emdash-remote.sh whoami
@@ -20,4 +25,12 @@ set -a
 source .env
 set +a
 ORIGIN="${EMDASH_REMOTE_ORIGIN:-https://emdash-blog-repo.denshoch.workers.dev}"
-exec npx emdash "$@" --url "$ORIGIN"
+
+cmd=(npx emdash)
+if [[ -n "${CF_ACCESS_CLIENT_ID:-}" && -n "${CF_ACCESS_CLIENT_SECRET:-}" ]]; then
+	cmd+=(--header "CF-Access-Client-Id: ${CF_ACCESS_CLIENT_ID}")
+	cmd+=(--header "CF-Access-Client-Secret: ${CF_ACCESS_CLIENT_SECRET}")
+fi
+cmd+=("$@")
+cmd+=(--url "$ORIGIN")
+exec "${cmd[@]}"
