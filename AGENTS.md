@@ -48,6 +48,8 @@ Optional `.env` entry `EMDASH_REMOTE_ORIGIN` changes the `--url` target (default
 
 When the site is behind **Cloudflare Access**, the CLI may get HTML instead of JSON (`Unexpected token '<'`). Set **`CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET`** in `.env` (service token); `./scripts/emdash-remote.sh` passes them as `--header`. Do not use a single-line `EMDASH_HEADERS` with `\n` — bash will not turn that into a real newline.
 
+Upstream quirk: `emdash whoami` does not merge those headers on the `/auth/me` request when `EMDASH_TOKEN` is set. **`./scripts/emdash-remote.sh whoami`** is rewritten to **`content list posts --limit 1`** so Access headers apply. For a true `whoami`, use `emdash login` once with `-H` to persist headers, or unset `EMDASH_TOKEN` and rely on stored credentials (narrower use case).
+
 ## Production debugging (agents)
 
 When the deployed site returns 5xx, **confirm runtime evidence before changing theme code or content**.

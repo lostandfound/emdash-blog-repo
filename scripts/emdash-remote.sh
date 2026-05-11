@@ -10,7 +10,7 @@
 #
 # Usage (from anywhere):
 #   ./scripts/emdash-remote.sh content list posts
-#   ./scripts/emdash-remote.sh whoami
+#   ./scripts/emdash-remote.sh whoami   # actually runs `content list posts --limit 1` (see below)
 #   ./scripts/emdash-remote.sh types --output .emdash/types-remote.ts
 #
 set -euo pipefail
@@ -26,9 +26,17 @@ source .env
 set +a
 ORIGIN="${EMDASH_REMOTE_ORIGIN:-https://emdash-blog-repo.denshoch.workers.dev}"
 
-# Subcommand must come immediately after `emdash` (citty); --header before whoami is parsed as the command name.
+# `emdash whoami` calls /auth/me with a fetch that ignores --header and EMDASH_HEADERS
+# when EMDASH_TOKEN is set, so Cloudflare Access returns HTML ("Unexpected token '<'").
+# Map whoami to a command that uses createClientFromArgs (service token headers apply).
+args=("$@")
+if [[ "${args[0]:-}" == "whoami" ]]; then
+	args=(content list posts --limit 1 "${args[@]:1}")
+fi
+
+# Subcommand must come immediately after `emdash` (citty); global flags after the subcommand.
 cmd=(npx emdash)
-cmd+=("$@")
+cmd+=("${args[@]}")
 if [[ -n "${CF_ACCESS_CLIENT_ID:-}" && -n "${CF_ACCESS_CLIENT_SECRET:-}" ]]; then
 	cmd+=(--header "CF-Access-Client-Id: ${CF_ACCESS_CLIENT_ID}")
 	cmd+=(--header "CF-Access-Client-Secret: ${CF_ACCESS_CLIENT_SECRET}")
